@@ -1,0 +1,33 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29403.142
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PasswdAPI", "PasswdAPI.csproj", "{ADC41D81-55CF-45C4-9954-16CFDBE7B2CC}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{47184F49-A95A-442D-B60A-CBA9D8860F04}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PasswdTests", "..\PasswdTests\PasswdTests.csproj", "{A181D729-8FEF-4523-8CE2-9A51D89FD541}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{ADC41D81-55CF-45C4-9954-16CFDBE7B2CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ADC41D81-55CF-45C4-9954-16CFDBE7B2CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ADC41D81-55CF-45C4-9954-16CFDBE7B2CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ADC41D81-55CF-45C4-9954-16CFDBE7B2CC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A181D729-8FEF-4523-8CE2-9A51D89FD541}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A181D729-8FEF-4523-8CE2-9A51D89FD541}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A181D729-8FEF-4523-8CE2-9A51D89FD541}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A181D729-8FEF-4523-8CE2-9A51D89FD541}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {CAC314DE-0FB8-4059-BC39-46751058FCDE}
+	EndGlobalSection
+EndGlobal
