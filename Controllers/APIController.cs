@@ -41,7 +41,10 @@ namespace PasswdAPI.Controllers
         [HttpGet("changes/")]
         public ActionResult<string> GetChangeLog()
         {
-            return Program.changeLog.ToString();
+            string results = "No changes";
+            if (Program.changeLog != null && Program.changeLog.Count > 0) results = Program.changeLog.ToString();
+
+            return results;
         }
 
         [HttpGet("users/")]
