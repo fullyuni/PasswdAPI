@@ -4,6 +4,7 @@ using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using System.Data;
+using System.Configuration;
 
 namespace PasswdAPI
 {
@@ -13,17 +14,14 @@ namespace PasswdAPI
         public static DataSet dataSet = new DataSet();
 
         //path to demo input files
-        private static string parentFilePath = @"C:\Projects\PasswdAPI\inputData\";
+        public static string parentFilePath = @"C:\Projects\PasswdAPI\inputData\";
+
 
         //watcher to handle changes to files while program is running
-        private static FileSystemWatcher watcher = new FileSystemWatcher();
+        public static FileSystemWatcher watcher = new FileSystemWatcher();
 
         public static void Main(string[] args)
         {
-            //init tables/wather on startup
-            DataTableBuilders.UpdateDataTables(dataSet, parentFilePath);
-            watcher = watchFile(parentFilePath);
-
             CreateWebHostBuilder(args).Build().Run();
         }
 
@@ -43,8 +41,10 @@ namespace PasswdAPI
             Console.WriteLine($"File: {e.FullPath} {e.ChangeType}");
         }
 
-        private static void OnDeleted(object source, FileSystemEventArgs e) =>
+        private static void OnDeleted(object source, FileSystemEventArgs e)
+        {
             Console.WriteLine($"File: {e.FullPath} {e.ChangeType}");
+        }
 
         private static void OnRenamed(object source, RenamedEventArgs e)
         {
@@ -52,7 +52,7 @@ namespace PasswdAPI
         }
 
         //creates new watcher
-        private static FileSystemWatcher watchFile(string filePath)
+        public static FileSystemWatcher watchFile(string filePath)
         {
             FileSystemWatcher watcher = new FileSystemWatcher();
             watcher.Path = filePath;

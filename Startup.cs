@@ -18,6 +18,12 @@ namespace PasswdAPI
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            Program.parentFilePath = Configuration.GetSection("AppConfiguration")["ParentFilePath"];
+            
+            //init tables/wather on startup
+
+            DataTableBuilders.UpdateDataTables(Program.dataSet, Program.parentFilePath);
+            Program.watcher = Program.watchFile(Program.parentFilePath);
         }
 
         public IConfiguration Configuration { get; }

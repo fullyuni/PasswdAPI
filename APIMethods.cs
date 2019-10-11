@@ -58,22 +58,27 @@ namespace PasswdAPI
         //gets a user based on the unique uid
         public static string GetUser(DataTable dataTable, int uid)
         {
-            
             DataRow[] results = dataTable.Select($"uid = {uid}");
+            string output = null;
 
+            if (results.Length > 0)
+            {
+                DataRow row = results[0];
+
+                JObject user = new JObject();
+
+                user.Add("name", row["name"].ToString());
+                user.Add("uid", row["uid"].ToString());
+                user.Add("gid", row["gids"].ToString().Replace("|", ""));
+                user.Add("comment", row["comment"].ToString());
+                user.Add("home", row["home"].ToString());
+                user.Add("shell", row["shell"].ToString());
+
+                output = user.ToString();
+            }
             //should only ever return one result
-            DataRow row = results[0];
 
-            JObject user = new JObject();
-
-            user.Add("name", row["name"].ToString());
-            user.Add("uid", row["uid"].ToString());
-            user.Add("gid", row["gids"].ToString().Replace("|", ""));
-            user.Add("comment", row["comment"].ToString());
-            user.Add("home", row["home"].ToString());
-            user.Add("shell", row["shell"].ToString());
-
-            return user.ToString();
+            return output;
         }
 
         //gets collection of groups based on input parameters

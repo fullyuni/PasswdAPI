@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Linq;
 
 namespace PasswdAPI.Controllers
 {
+
     [Route("api")]
     [ApiController]
     public class APIController : ControllerBase
@@ -33,8 +35,16 @@ namespace PasswdAPI.Controllers
         [HttpGet("users/{id}")]
         public ActionResult<string> GetUser(int id)
         {
-            //TODO: return 404 error if no id found
-            return APIMethods.GetUser(Program.dataSet.Tables["UserTable"], id);
+            string result = APIMethods.GetUser(Program.dataSet.Tables["UserTable"], id);
+            if (result == null)
+            {
+                Response.StatusCode = 404;
+                JObject jObject = new JObject();
+
+                jObject.Add("error", $"User with id {id} not found.");
+                jObject.Add("error code", Response.StatusCode);
+            }
+            return result;
         }
 
         [HttpGet("users/query")]
@@ -73,7 +83,18 @@ Groups found using user's name as a member:
         [HttpGet("groups/{id}")]
         public ActionResult<string> GetGroup(int id)
         {
-            return APIMethods.GetGroup(Program.dataSet.Tables["GroupTable"], id);
+            string result = APIMethods.GetGroup(Program.dataSet.Tables["GroupTable"], id);
+            if (result == null)
+            {
+                Response.StatusCode = 404;
+                JObject jObject = new JObject();
+
+                jObject.Add("error", $"User with id {id} not found.");
+                jObject.Add("error code", Response.StatusCode);
+
+                result = jObject.ToString();
+            }
+            return result;
         }
     }
 }
