@@ -33,7 +33,8 @@ namespace PasswdAPI.Controllers
 /users/<uid>/groups                                                                         Return all the groups for a given user.
 /groups                                                                                     Return a list of all groups on the system, a defined by /etc/group.
 /groups/query[?name=<nq>][&gid=<gq>][&member=<mq1>[&member=<mq2>][&...]                     Return a list of groups matching all of the specified query fields.
-/groups/<gid>                                                                               Return a single group with <gid>.";
+/groups/<gid>                                                                               Return a single group with <gid>.
+/changes                                                                                    Returns all changes that have occured to files while application is running.";
             }
             return result;
         }
