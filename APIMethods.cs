@@ -59,10 +59,11 @@ namespace PasswdAPI
         public static string GetUser(DataTable dataTable, int uid)
         {
             DataRow[] results = dataTable.Select($"uid = {uid}");
-            string output = null;
+            string output = "";
 
             if (results.Length > 0)
             {
+                //should only ever return one result
                 DataRow row = results[0];
 
                 JObject user = new JObject();
@@ -76,7 +77,7 @@ namespace PasswdAPI
 
                 output = user.ToString();
             }
-            //should only ever return one result
+            else if (results.Length > 1) Program.errorStatus = PasswdErrors.PasswdError.BadData;
 
             return output;
         }
@@ -124,16 +125,23 @@ namespace PasswdAPI
         public static string GetGroup(DataTable dataTable, int gid)
         {
             DataRow[] results = dataTable.Select($"gid = {gid}");
+            string output = null;
 
-            DataRow row = results[0];
+            if (results.Length > 0)
+            {
+                DataRow row = results[0];
 
-            JObject group = new JObject();
+                JObject group = new JObject();
 
-            group.Add("name", row["name"].ToString());
-            group.Add("gid", row["gid"].ToString());
-            group.Add("members", row["members"].ToString().Replace("|", ""));
+                group.Add("name", row["name"].ToString());
+                group.Add("gid", row["gid"].ToString());
+                group.Add("members", row["members"].ToString().Replace("|", ""));
 
-            return group.ToString();
+                output = group.ToString();
+            }
+            else if (results.Length > 1) Program.errorStatus = PasswdErrors.PasswdError.BadData;
+
+            return output;
         }
 
         //gets all groups with the same gid as the selected user

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
@@ -17,13 +18,23 @@ namespace PasswdAPI
     {
         public Startup(IConfiguration configuration)
         {
+            //get app settings and configurations
             Configuration = configuration;
-            Program.parentFilePath = Configuration.GetSection("AppConfiguration")["ParentFilePath"];
-            
-            //init tables/wather on startup
+            Program.groupFilePath = Configuration.GetSection("AppConfiguration")["groupFilePath"];
+            Program.passwdFilePath = Configuration.GetSection("AppConfiguration")["passwdFilePath"];
 
-            DataTableBuilders.UpdateDataTables(Program.dataSet, Program.parentFilePath);
-            Program.watcher = Program.watchFile(Program.parentFilePath);
+            if (File.Exists(Program.groupFilePath) && File.Exists(Program.passwdFilePath))
+            {
+                Program.dataSet = new System.Data.DataSet();
+
+                //init tables/watcher on startup
+                DataTableBuilders.UpdateUserTable(Program.dataSet, Program.passwdFilePath);
+                DataTableBuilders.UpdateGroupTable(Program.dataSet, Program.groupFilePath);
+
+                Program.groupWatcher = Program.watchFile(Program.groupFilePath);
+                Program.userWatcher = Program.watchFile(Program.passwdFilePath);
+            }
+            else Program.errorStatus = PasswdErrors.PasswdError.FileNotFound;
         }
 
         public IConfiguration Configuration { get; }

@@ -11,15 +11,8 @@ namespace PasswdAPI
 {
     public class DataTableBuilders
     {
-        //update all tables
-        public static void UpdateDataTables(DataSet dataSet, string parentFilePath)
-        {
-            UpdateGroupTable(dataSet, parentFilePath + "group");
-            UpdateUserTable(dataSet, parentFilePath + "passwd");
-        }
-
         //Builds/updates the GroupTable based on the input filePath
-        private static void UpdateGroupTable(DataSet dataSet, string filePath)
+        public static void UpdateGroupTable(DataSet dataSet, string filePath)
         {
             //init table and columns
             DataTable groupTable = new DataTable("GroupTable");
@@ -50,55 +43,70 @@ namespace PasswdAPI
             groupTable.Columns.Add(column);
 
             dataSet.Tables.Add(groupTable);
-            
-            //read in input file and build table rows based on data on each line
-            using (StreamReader streamReader = new StreamReader(filePath))
+
+            try
             {
-                string record = streamReader.ReadLine();
-
-                while (record != null && record.Length > 0)
+                //read in input file and build table rows based on data on each line
+                using (StreamReader streamReader = new StreamReader(filePath))
                 {
-                    //skip header comments
-                    if (!record.Contains("#"))
+                    try
                     {
-                        DataRow row = groupTable.NewRow();
+                        string record = streamReader.ReadLine();
 
-                        string[] groupValues = record.Split(":");
-
-                        row["name"] = groupValues[0];
-                        //groupValues[1] is the password which is always "*" and therefore cam be ignored
-                        row["gid"] = groupValues[2];
-
-                        //beacuse a group may have multiple members, we handle this column
-                        string memberString = "";
-                        if (groupValues[3].Length > 0)
+                        while (record != null && record.Length > 0)
                         {
-                            string[] members = groupValues[3].Split(",");
-
-                            //by surrounding the individual members with "|", we can prevent the
-                            //chance of accidentally getting partial names when we later query
-                            //the table (i.e. "groot" would be returned when searching "root").
-                            memberString += $"|{members[0]}|";
-                            for (int i = 1; i < members.Length; i++)
+                            //skip header comments
+                            if (!record.Contains("#"))
                             {
-                                memberString += $",|{members[i]}|";
+                                DataRow row = groupTable.NewRow();
+
+                                string[] groupValues = record.Split(":");
+
+                                row["name"] = groupValues[0];
+                                //groupValues[1] is the password which is always "*" and therefore cam be ignored
+                                row["gid"] = groupValues[2];
+
+                                //beacuse a group may have multiple members, we handle this column
+                                string memberString = "";
+                                if (groupValues[3].Length > 0)
+                                {
+                                    string[] members = groupValues[3].Split(",");
+
+                                    //by surrounding the individual members with "|", we can prevent the
+                                    //chance of accidentally getting partial names when we later query
+                                    //the table (i.e. "groot" would be returned when searching "root").
+                                    memberString += $"|{members[0]}|";
+                                    for (int i = 1; i < members.Length; i++)
+                                    {
+                                        memberString += $",|{members[i]}|";
+                                    }
+                                }
+
+                                row["members"] = memberString;
+
+                                groupTable.Rows.Add(row);
+
                             }
+
+                            record = streamReader.ReadLine();
                         }
-
-                        row["members"] = memberString;
-
-                        groupTable.Rows.Add(row);
+                    }
+                    catch
+                    {
+                        Program.errorStatus = PasswdErrors.PasswdError.BadData;
                     }
 
-                    record = streamReader.ReadLine();
+                    streamReader.Close();
                 }
-
-                streamReader.Close();
+            }
+            catch
+            {
+                Program.errorStatus = PasswdErrors.PasswdError.FileNotFound;
             }
         }
 
         //Builds/updates the UserTable based on the input filePath
-        private static void UpdateUserTable(DataSet dataSet, string filePath)
+        public static void UpdateUserTable(DataSet dataSet, string filePath)
         {
             //init table and columns
             DataTable userTable = new DataTable("UserTable");
@@ -154,52 +162,68 @@ namespace PasswdAPI
 
             dataSet.Tables.Add(userTable);
 
-            //read in input file and build table rows based on data on each line
-            using (StreamReader streamReader = new StreamReader(filePath))
+            try
             {
-                string record = streamReader.ReadLine();
-
-                while (record != null && record.Length > 0)
+                //read in input file and build table rows based on data on each line
+                using (StreamReader streamReader = new StreamReader(filePath))
                 {
-                    //skip header comments
-                    if (!record.Contains("#"))
+                    try
                     {
-                        DataRow row = userTable.NewRow();
+                        string record = streamReader.ReadLine();
 
-                        string[] userValues = record.Split(":");
-
-                        row["name"] = userValues[0];
-                        //userValues[1] is the password which is always "*" and therefore cam be ignored
-                        row["uid"] = userValues[2];
-
-                        //similar to the group members issue from above, we use this to handle
-                        //multiple gids and prevent querying substrings
-                        string gidString = "";
-                        if (userValues[3].Length > 0)
+                        while (record != null && record.Length > 0)
                         {
-                            string[] gids = userValues[3].Split(",");
-
-                            gidString += $"|{gids[0]}|";
-
-                            for (int i = 1; i < gids.Length; i++)
+                            //skip header comments
+                            if (!record.Contains("#"))
                             {
-                                gidString += $",|{gids[i]}|";
+                                DataRow row = userTable.NewRow();
+
+                                string[] userValues = record.Split(":");
+
+                                row["name"] = userValues[0];
+                                //userValues[1] is the password which is always "*" and therefore cam be ignored
+                                row["uid"] = userValues[2];
+
+                                //similar to the group members issue from above, we use this to handle
+                                //multiple gids and prevent querying substrings
+                                string gidString = "";
+                                if (userValues[3].Length > 0)
+                                {
+                                    string[] gids = userValues[3].Split(",");
+
+                                    gidString += $"|{gids[0]}|";
+
+                                    for (int i = 1; i < gids.Length; i++)
+                                    {
+                                        gidString += $",|{gids[i]}|";
+                                    }
+                                }
+
+                                row["gids"] = gidString;
+                                row["comment"] = userValues[4];
+                                row["home"] = userValues[5];
+                                row["shell"] = userValues[6];
+
+                                userTable.Rows.Add(row);
                             }
+
+                            record = streamReader.ReadLine();
                         }
 
-                        row["gids"] = gidString;
-                        row["comment"] = userValues[4];
-                        row["home"] = userValues[5];
-                        row["shell"] = userValues[6];
-
-                        userTable.Rows.Add(row);
+                        streamReader.Close();
                     }
-
-                    record = streamReader.ReadLine();
+                    catch
+                    {
+                        Program.errorStatus = PasswdErrors.PasswdError.BadData;
+                    }
                 }
-
-                streamReader.Close();
+                    
             }
+            catch
+            {
+                Program.errorStatus = PasswdErrors.PasswdError.FileNotFound;
+            }
+            
         }
 
     }
