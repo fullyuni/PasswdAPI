@@ -151,19 +151,20 @@ namespace PasswdAPI
 
             DataRow row = results[0];
 
+            JArray outputArray = new JArray();
             string output = "";
 
             if (row["gids"].ToString().Replace("|", "").Length > 0)
             {
                 string[] gids = row["gids"].ToString().Replace("|", "").Split(",");
-                string query = "?";
 
-                foreach (var gid in gids)
+                foreach (string gid in gids)
                 {
-                    query += $"gid={gid}";
-                }
+                    string group = GetGroup(dataSet.Tables["GroupTable"], int.Parse(gid));
 
-                output = GetGroups(dataSet.Tables["GroupTable"], query);
+                    if (group != null && group.Length > 0) outputArray.Add(JObject.Parse(group));
+                }
+                output = outputArray.ToString();
             }
             else output = "No groups associated with user's gid";
 

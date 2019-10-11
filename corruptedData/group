@@ -9,7 +9,7 @@
 # Open Directory.
 ##
 nobody:*:-2:yunus
-nogroup:*:-1:
+nogroup:*::
 alGroup:*:1:al
 anotherGroup:*:22:yunus,al,bob,cam,don
 lastgroup:*:33:yunus,al,bob
