@@ -6,6 +6,8 @@ A minimal HTTP service that exposes the user and group information on a UNIX-lik
 This project is a .NET Core app written in C#.
 
 ## Setup
+Because this is a .NET Core application, you will need .NET Core installed on your environment. Please use the following link and instructions on the page to install the latest version of .NET Core: https://dotnet.microsoft.com/download
+
 Before launching the application, please check that the file appsettings.json (included in the project) is pointing to the desired file paths. The default file paths are set to:
 ```JSON
   "AppConfiguration": {
@@ -20,10 +22,8 @@ dotnet run
 Note: Since the data set was realtively minimal, I chose to forgo the traditional DB model and use a collection of in-memory tables that are built on startup and updated using the FileSystemWatcher. I figured this would reduce the amount of setup work needed for the end-user (the tester).
 
 ## Usage
-Once the app is launched you can access the API from your browser using:
-```HTML
-https://localhost:5001/api
-```
+Once the app is launched you can access the API from your browser using: https://localhost:5001/api
+
 The initial landing page has all the possibl API commands outlined. Simply append the following to the localhost path given above:
 ```HTML
 /users
