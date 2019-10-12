@@ -1,7 +1,7 @@
 # PasswdAPI
 This is Yunus Tezcan's submission for a code challenge from Brain Corp.
 
-A minimal HTTP service that exposes the user and group information on a UNIX-like system that is usually locked away in the UNIX /etc/passwd and /etc/groups files.
+The goal was to create a minimal HTTP service that exposes the user and group information on a UNIX-like system that is usually locked away in the UNIX /etc/passwd and /etc/groups files.
 
 This project is a .NET Core app written in C#.
 
