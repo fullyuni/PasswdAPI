@@ -34,7 +34,7 @@ Return a list of all users on the system, as defined in the /etc/passwd file.
 ```
 Return a list of users matching all of the specified query fields.
 
-Note: While I did not find any naturally occuring examples, users apparently can have multiple gids. My code assumes this case and can handle multiple gids in the format: 1,-2,3,(etc.)
+Note: While I did not find any naturally occuring examples, users apparently can have multiple gids. My code assumes this case and can handle multiple gids in the format: [name]:[uid]:[gid1],[gid2],[gid3]...:[comment]:[home]:[shell]
 ```HTML
 /users/<uid>
 ```
