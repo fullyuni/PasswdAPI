@@ -15,7 +15,7 @@ namespace PasswdAPI
         public static DataSet dataSet;
 
         public static PasswdErrors.PasswdError errorStatus = 0;
-        public static JArray changeLog;
+        public static JArray changeLog = new JArray();
 
         public static string groupFilePath;
         public static string passwdFilePath;
@@ -49,19 +49,27 @@ namespace PasswdAPI
                 dataSet = new DataSet();
                 DataTableBuilders.UpdateGroupTable(dataSet, groupFilePath);
             }
-            changeLog.Add($"File: {e.FullPath} {e.ChangeType}\n");
+            JObject jObject = new JObject();
+            jObject.Add("File", $"{e.FullPath} {e.ChangeType}");
+            changeLog.Add(jObject);
         }
 
         private static void OnDeleted(object source, FileSystemEventArgs e)
         {
             errorStatus = PasswdErrors.PasswdError.FileDeleted;
-            changeLog.Add($"File: {e.FullPath} {e.ChangeType}\n");
+
+            JObject jObject = new JObject();
+            jObject.Add("File", $"{e.FullPath} {e.ChangeType}");
+            changeLog.Add(jObject);
         }
 
         private static void OnRenamed(object source, RenamedEventArgs e)
         {
             errorStatus = PasswdErrors.PasswdError.FileRenamed;
-            changeLog.Add($"File: {e.OldFullPath} renamed to {e.FullPath}");
+
+            JObject jObject = new JObject();
+            jObject.Add("File", $"{e.OldFullPath} renamed to {e.FullPath}");
+            changeLog.Add(jObject);
         }
 
         //creates new watcher
